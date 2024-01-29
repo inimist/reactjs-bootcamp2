@@ -10,7 +10,7 @@ function MultipleChoiceOneAnswer({ formRegister, setValue }) {
     };
 
     const handleChoicesAdd = () => {
-        const numberOfValuesToAdd = 3;
+        const numberOfValuesToAdd = 1;
         const newValues = [];
         let choicesValue = choices[choices.length - 1];
 
@@ -44,7 +44,8 @@ function MultipleChoiceOneAnswer({ formRegister, setValue }) {
 
 
                             <input
-                                {...formRegister(`answer_options[${index}]`)} className='form-control' id={'answer_options' + val} />
+                                {...formRegister(`answer_options[${index}]`, { required: 'This field is required' })} className='form-control' id={'answer_options' + val} />
+
                         </div>
                         <div className="form-check mb-4">
                             <input
@@ -56,7 +57,7 @@ function MultipleChoiceOneAnswer({ formRegister, setValue }) {
                     </li>
                 ))}
             </ul>
-            <button type="button" className="btn btn-success btn-sm my-2" onClick={handleChoicesAdd}>Add 3 More Choices</button>
+            <button type="button" className="btn btn-success btn-sm my-2" onClick={handleChoicesAdd}>Add 1 More Choices</button>
         </>
     )
 }

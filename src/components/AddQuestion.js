@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import MultipleChoiceOneAnswer from './questionType/MultipleChoiceOneAnswer';
+import TrueFalse from './questionType/TrueFalse';
 
-function AddQuestion() {
+function AddQuestion({ setActivePage }) {
     const [loading, setLoading] = useState(true);
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const [questionType, setQuestionType] = useState({});
@@ -25,23 +26,31 @@ function AddQuestion() {
         return combined;
     };
     const onSubmit = (data) => {
-        
         let choices = {};
         setSelQuestion(data.question_type_id);
         if (data.answer_options) {
             choices = arrayCombine(data.answer_options, data.correct_answer);
         }
-       // const { answer_options, correct_answer, ...newObject } = data;
-      //  console.log( answer_options,data);return false;
-        axios.post('/question/store', data).then((res) => {
-            console.log(data);
-            // setQuestionAnswers({
-            //     question_id: res.data.question_id,
-            //     answer_options: data.answer_options,
-            //     correct_answer:data.correct_answer
-            // })
+        if (data.question_type_id == 4) {
+           data.answer_options = ['true','false'];
+        }
+      
+        if (data.question_type_id == 5) {
+            const answer = Object.entries(choices)
+                .filter(([key, value]) => value === true)
+                .map(([key]) => key).join(', ');
+            data.correct_answer = answer;
+        }
+        
+        axios.post('/question/create', data).then((res) => {
+            setQuestionAnswers({
+                question_id: res.data.question_id,
+                answer_options: data.answer_options,
+                correct_answer: data.correct_answer
+            })
+            res.data != 'true' && setActivePage('questionBank')
         })
-        console.log(questionAnswers);
+
     };
     useEffect(() => {
         axios.get('questionType').then((res) => {
@@ -102,6 +111,7 @@ function AddQuestion() {
                             {errors.questionType && <span className="invalid-feedback">{errors.questionType.message}</span>}
                         </div>
                         {selQuestion === '5' && <MultipleChoiceOneAnswer formRegister={register} setValue={setValue} />}
+                        {selQuestion === '4' && <TrueFalse formRegister={register} setValue={setValue} />}
                         <button type="submit" className="btn btn-primary">Submit</button>
                     </form>
                 </div>
