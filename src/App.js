@@ -44,7 +44,7 @@ axios.interceptors.response.use(
   }
 );
 function App() {
-  const [activePage, setActivePage] = useState('login');
+  const [activePage, setActivePage] = useState('home');
   const [quizId, setQuizId] = useState(null)
   const [quizData, setQuizData] = useState({});
   const { quiz_slots } = quizData;

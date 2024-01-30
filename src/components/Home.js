@@ -14,6 +14,7 @@ function Home({ setActivePage, handleQuizClick, handleAttemptClick ,quizData}) {
         axios.get('quiz').then((res) => {
             setData(res.data);
             setLoading(false);
+            console.log(data);
         })
     }, [])
  

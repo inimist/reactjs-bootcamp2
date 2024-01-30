@@ -28,8 +28,9 @@ const Login = () => {
 
                 <h2>Login</h2>
                 <div className="input-group">
-                    <label htmlFor="username">Username</label>
+                    <label className='logLabel' htmlFor="username">Username</label>
                     <input
+                        className='logInput'
                         type="text"
                         id="username"
                         value={username}
@@ -37,8 +38,9 @@ const Login = () => {
                     />
                 </div>
                 <div className="input-group">
-                    <label htmlFor="password">Password</label>
+                    <label className='logLabel' htmlFor="password">Password</label>
                     <input
+                        className='logInput'
                         type="password"
                         id="password"
                         value={password}
@@ -46,7 +48,7 @@ const Login = () => {
                     />
                 </div>
                 {error && <div className="error-message">{error}</div>}
-                <button onClick={handleLogin}>Login</button>
+                <button className='logBtn' onClick={handleLogin}>Login</button>
 
             </div>
         </div>

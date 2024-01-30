@@ -28,20 +28,21 @@ function AddQuestion({ setActivePage }) {
     const onSubmit = (data) => {
         let choices = {};
         setSelQuestion(data.question_type_id);
+        data.creator_id = '0';
         if (data.answer_options) {
             choices = arrayCombine(data.answer_options, data.correct_answer);
         }
         if (data.question_type_id == 4) {
-           data.answer_options = ['true','false'];
+            data.answer_options = ['true', 'false'];
         }
-      
+
         if (data.question_type_id == 5) {
             const answer = Object.entries(choices)
                 .filter(([key, value]) => value === true)
                 .map(([key]) => key).join(', ');
             data.correct_answer = answer;
         }
-        
+
         axios.post('/question/create', data).then((res) => {
             setQuestionAnswers({
                 question_id: res.data.question_id,
