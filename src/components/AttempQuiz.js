@@ -3,35 +3,22 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 
-function AttemptQuiz({ quizId, quizData }) {
+
+function AttemptQuiz({ quizId, quizData, quizAttemptclick }) {
   const { quiz_slots } = quizData;
   const { register, handleSubmit } = useForm();
   const [result, setResult] = useState({});
 
-  const onSubmit = (data) => {
+  const handleQuizAttempt = (data) => {
     axios.post('/quizAttempt/create', data).then((res) => {
       setResult(res.data);
-      if (res.data.result == 'pass') {
-        Swal.fire({
-          icon: "success",
-          title: "congratulation",
-          html: '<b>Result :' + res.data.correctquestions + '/' + res.data.totalquestions + '</b>',
-          footer: '<a href="#">Why do I have this issue?</a>'
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops..You need to try again!",
-          html: '<b>Result :' + res.data.correctquestions + '/' + res.data.totalquestions + '</b>',
-          footer: '<a href="#">Why do I have this issue?</a>'
-        });
-      }
+      quizAttemptclick(res.data.id);
     })
   }
 
   return (
     <div className='container'>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(handleQuizAttempt)}>
         <input type='hidden' {...register('quiz_id')} value={quizId} />
         <input type='hidden' {...register('user_id')} value='1' />
         {quiz_slots && quiz_slots.map((res, index) => (

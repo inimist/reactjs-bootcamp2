@@ -13,6 +13,8 @@ import CreateQuiz from "./components/CreateQuiz";
 import Swal from "sweetalert2";
 import EditQuiz from "./components/EditQuiz";
 import Login from "./components/user/Login";
+import AccessHub from "./components/user/AccessHub";
+import QuizReview from "./components/QuizReview";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL + "/api/v1";
 // if (!axios.defaults.headers.common["Authorization"])
@@ -46,6 +48,7 @@ axios.interceptors.response.use(
 function App() {
   const [activePage, setActivePage] = useState('home');
   const [quizId, setQuizId] = useState(null)
+  const [quizAttemptId, setQuizAttemptId] = useState();
   const [quizData, setQuizData] = useState({});
   const { quiz_slots } = quizData;
 
@@ -73,24 +76,30 @@ function App() {
       .catch((error) => {
         console.error("Error fetching quiz data:", error);
       });
-
   };
+
+  const quizAttemptclick = (id) =>{
+    console.log(id);
+    setQuizAttemptId(id);
+    setActivePage('quizReview');
+  }
   return (
     <>
       <div>
-       
-        {activePage === 'login' && <Login  setActivePage={setActivePage} />} 
-        <Navbar setActivePage={setActivePage} />
+
+        {activePage === 'accessHub' && <AccessHub setActivePage={'accessHub'} />}
+        {activePage !== 'login' && <Navbar setActivePage={setActivePage} />}
         {activePage === 'home' && <Home setActivePage={setActivePage} handleQuizClick={handleQuizClick} handleAttemptClick={handleAttemptClick} quizData={quizData} />}
         {activePage === 'questionBank' && <QuestionBank setActivePage={setActivePage} />}
         {activePage === 'about' && <h2>About Page</h2>}
         {activePage === 'contact' && <h2>Contact Page</h2>}
         {activePage === 'addQuestion' && <AddQuestion setActivePage={setActivePage} />}
         {activePage === 'quizQuestion' && <QuizQuestions quizId={quizId} />}
-        {activePage === 'attemptQuestion' && <AttempQuiz quizId={quizId} quizData={quizData} />}
+        {activePage === 'attemptQuestion' && <AttempQuiz quizId={quizId} quizData={quizData} quizAttemptclick={quizAttemptclick} />}
         {activePage === 'createQuiz' && <CreateQuiz />}
         {activePage === 'editQuiz' && <EditQuiz quizId={quizId} />}
-      
+        {activePage === 'quizReview' && <QuizReview quizAttemptId={quizAttemptId} />}
+
       </div>
       {/* <BrowserRouter>
         <Routes>

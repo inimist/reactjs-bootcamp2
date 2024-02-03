@@ -13,6 +13,18 @@ function QuestionBank({ setActivePage }) {
     })
   }, [])
 
+  const handleDelete = (id) => {
+    axios.delete('question/delete/' + id).then((res) => {
+      setLoading(true);
+      if (res.data == 'deleted') {
+        axios.get('/question').then((res) => {
+          setData(res.data);
+          setLoading(false);
+        })
+      }
+    })
+  }
+
   return (
     <>
 
@@ -41,7 +53,7 @@ function QuestionBank({ setActivePage }) {
                 {data.length && data.map((val, index) => {
                   return (<tr key={val.id}>
                     <td>{index + 1}</td>
-                    <td><i className="fas fa-edit" title="Edit"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i className="fas fa-times" title="Delete"></i></td>
+                    <td><i className="fas fa-edit" title="Edit"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i className="fas fa-times" title="Delete" onClick={() => handleDelete(val.id)}></i></td>
                     <td>{val.title}</td>
                     <td>{val.description}</td>
                     <td>{val.question_type.title}</td>

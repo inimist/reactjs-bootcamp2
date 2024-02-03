@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import './login.css'; // You can create a separate CSS file for styling
 import axios from 'axios';
 
-const Login = () => {
+function Login({ setActivePage }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -12,7 +11,7 @@ const Login = () => {
     }
 
     const handleLogin = () => {
-        console.log(username, password);
+        
         if (username && password) {
             axios.post('/login', data).then((res) => {
                 console.log(res.data)
@@ -20,6 +19,11 @@ const Login = () => {
         } else {
             setError('Invalid username or password');
         }
+    };
+
+    const cursorPointer = {
+        cursor: 'pointer'
+        // Add more styles as needed
     };
 
     return (
@@ -49,6 +53,7 @@ const Login = () => {
                 </div>
                 {error && <div className="error-message">{error}</div>}
                 <button className='logBtn' onClick={handleLogin}>Login</button>
+                <p className='text-primary ' style={cursorPointer}>Try as Guest!</p>
 
             </div>
         </div>
