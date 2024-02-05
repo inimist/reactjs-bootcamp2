@@ -47,7 +47,7 @@ function Home({ setActivePage, handleQuizClick, handleAttemptClick ,quizData}) {
                                     <td>{val.name}</td>
                                     <td>{val.description}</td>
                                     <td>{val.quiz_slots.length}</td>
-                                    <td>{val.minpassquestions}</td>
+                                    <td>{val.minpassquestions?val.minpassquestions:'0'}%</td>
                                     <td>{val.showpassfail ? 'Yes' : 'No'}</td>
                                 </tr>
                             ))}

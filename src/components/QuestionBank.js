@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import OptionButton from './button/Optionbutton';
+import Swal from 'sweetalert2';
 
 function QuestionBank({ setActivePage }) {
   const [data, setData] = useState({});
@@ -24,6 +25,23 @@ function QuestionBank({ setActivePage }) {
       }
     })
   }
+  const showDeleteConfirmation = (id) => {
+    // Using SweetAlert2 for a more styled confirmation dialog
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // User clicked the "Yes, delete it!" button
+            handleDelete(id);
+        }
+    });
+};
 
   return (
     <>
@@ -53,7 +71,7 @@ function QuestionBank({ setActivePage }) {
                 {data.length && data.map((val, index) => {
                   return (<tr key={val.id}>
                     <td>{index + 1}</td>
-                    <td><i className="fas fa-edit" title="Edit"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i className="fas fa-times" title="Delete" onClick={() => handleDelete(val.id)}></i></td>
+                    <td><i className="fas fa-edit" title="Edit"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i className="fas fa-times" title="Delete" onClick={() => showDeleteConfirmation(val.id)}></i></td>
                     <td>{val.title}</td>
                     <td>{val.description}</td>
                     <td>{val.question_type.title}</td>

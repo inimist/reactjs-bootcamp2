@@ -6,13 +6,15 @@ function EditQuiz({ quizId }) {
     const [data, setData] = useState({
         name: '',
         description: '',
+        minpassquestions: ''
     });
 
     useEffect(() => {
         axios.get('/quiz/edit/' + quizId).then((res) => {
             setData({
                 'name': res.data.name,
-                'description': res.data.description
+                'description': res.data.description,
+                'minpassquestions': res.data.minpassquestions,
             });
         });
     }, [quizId]);
@@ -20,7 +22,9 @@ function EditQuiz({ quizId }) {
     const [errors, setErrors] = useState({
         name: '',
         description: '',
+        'minpassquestions': ''
     });
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -28,7 +32,22 @@ function EditQuiz({ quizId }) {
             ...prevData,
             [name]: value,
         }));
+
+        if (name === 'minpassquestions') {
+            if (value < 0 || value > 100) {
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    minpassquestions: 'Min pass question must be between 0 and 100',
+                }));
+            } else {
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    minpassquestions: '',
+                }));
+            }
+        }
     };
+
 
     const onSubmit = (event) => {
         event.preventDefault();
@@ -84,6 +103,20 @@ function EditQuiz({ quizId }) {
                         onChange={handleChange}
                     ></textarea>
                     {errors.description && <span className="invalid-feedback">{errors.description}</span>}
+                </div>
+                <div className="form-group">
+                    <label htmlFor="description">Min Pass question</label>
+                    <input type='number'
+                        id="description"
+                        className={`form-control ${errors.minpassquestions ? 'is-invalid' : ''}`}
+                        placeholder="Enter min pass question percentage"
+                        max='100'
+                        min='0'
+                        name="minpassquestions"
+                        value={data.minpassquestions}
+                        onChange={handleChange}
+                    />
+                    {errors.minpassquestions && <span className="invalid-feedback">{errors.minpassquestions.message}</span>}
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>
