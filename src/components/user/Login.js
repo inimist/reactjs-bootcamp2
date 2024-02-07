@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Login({ setActivePage }) {
+function Login({ handleToggle, setActivePage }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const data = {
-        'user': username,
+        'email': username,
         'password': password
     }
 
     const handleLogin = () => {
-        
+
         if (username && password) {
             axios.post('/login', data).then((res) => {
-                console.log(res.data)
+                if (res.data == 'invalid credential') {
+                    setError('Invalid username or password');
+                } else {
+                    setActivePage('home');
+                }
             })
         } else {
             setError('Invalid username or password');
@@ -53,7 +57,7 @@ function Login({ setActivePage }) {
                 </div>
                 {error && <div className="error-message">{error}</div>}
                 <button className='logBtn' onClick={handleLogin}>Login</button>
-                <p className='text-primary ' style={cursorPointer}>Try as Guest!</p>
+                <p>Don't have Account <span className='text-primary ' style={cursorPointer} onClick={handleToggle}>Signup!</span></p>
 
             </div>
         </div>

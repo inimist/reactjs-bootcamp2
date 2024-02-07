@@ -46,7 +46,7 @@ axios.interceptors.response.use(
   }
 );
 function App() {
-  const [activePage, setActivePage] = useState('home');
+  const [activePage, setActivePage] = useState('accessHub');
   const [quizId, setQuizId] = useState(null)
   const [quizAttemptId, setQuizAttemptId] = useState();
   const [quizData, setQuizData] = useState({});
@@ -87,8 +87,8 @@ function App() {
     <>
       <div>
 
-        {activePage === 'accessHub' && <AccessHub setActivePage={'accessHub'} />}
-        {activePage !== 'login' && <Navbar setActivePage={setActivePage} />}
+        {activePage === 'accessHub' && <AccessHub setActivePage={setActivePage} />}
+        {activePage !== 'accessHub' && <Navbar setActivePage={setActivePage} />}
         {activePage === 'home' && <Home setActivePage={setActivePage} handleQuizClick={handleQuizClick} handleAttemptClick={handleAttemptClick} quizData={quizData} />}
         {activePage === 'questionBank' && <QuestionBank setActivePage={setActivePage} />}
         {activePage === 'about' && <h2>About Page</h2>}
