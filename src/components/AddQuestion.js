@@ -28,7 +28,7 @@ function AddQuestion({ setActivePage }) {
     const onSubmit = (data) => {
         let choices = {};
         setSelQuestion(data.question_type_id);
-        data.creator_id = '0';
+        data.creator_id = localStorage.getItem('userId');
         if (data.answer_options) {
             choices = arrayCombine(data.answer_options, data.correct_answer);
         }

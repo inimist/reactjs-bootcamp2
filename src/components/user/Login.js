@@ -13,11 +13,19 @@ function Login({ handleToggle, setActivePage }) {
     const handleLogin = () => {
 
         if (username && password) {
-            axios.post('/login', data).then((res) => {
+            axios.post('/login', data, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            }).then((res) => {
+                
                 if (res.data == 'invalid credential') {
                     setError('Invalid username or password');
                 } else {
                     setActivePage('home');
+                    const obj = res.data.userId;
+                    localStorage.setItem('userId', JSON.stringify(obj));
                 }
             })
         } else {

@@ -3,8 +3,9 @@ import axios from "axios";
 function Navbar({ setActivePage }) {
 
     const handleLogout = () => {
-        axios.get('/logout').then((res)=>{
+        axios.post('/logout').then((res) => {
             console.log(res.data);
+            localStorage.removeItem('token');
         })
     }
     return (

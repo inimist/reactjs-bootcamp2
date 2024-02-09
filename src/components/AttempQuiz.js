@@ -8,6 +8,7 @@ function AttemptQuiz({ quizId, quizData, quizAttemptclick }) {
   const { quiz_slots } = quizData;
   const { register, handleSubmit } = useForm();
   const [result, setResult] = useState({});
+  const userId = localStorage.getItem('userId');
 
   const handleQuizAttempt = (data) => {
     axios.post('/quizAttempt/create', data).then((res) => {
@@ -20,7 +21,7 @@ function AttemptQuiz({ quizId, quizData, quizAttemptclick }) {
     <div className='container'>
       <form onSubmit={handleSubmit(handleQuizAttempt)}>
         <input type='hidden' {...register('quiz_id')} value={quizId} />
-        <input type='hidden' {...register('user_id')} value='1' />
+        <input type='hidden' {...register('user_id')} value={userId} />
         {quiz_slots && quiz_slots.map((res, index) => (
           <div key={res.question.id} className='my-3'>
             <div className="ms-2">
