@@ -21,8 +21,10 @@ const Signup = ({ handleToggle, setActivePage }) => {
             if (res.data == 'invalid credential') {
                 setError('Invalid username or password');
             } else {
-                const obj = res.data.userId;
-                localStorage.setItem('userId', JSON.stringify(obj));
+                const userId = res.data.userId;
+                const token = res.data.token;
+                localStorage.setItem('userId', JSON.stringify(userId));
+                localStorage.setItem('token', JSON.stringify(token));
                 setActivePage('home'); 
             }
         }).catch(function (error) {

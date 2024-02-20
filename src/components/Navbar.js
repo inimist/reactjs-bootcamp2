@@ -1,13 +1,28 @@
-import axios from "axios";
+import React from 'react';
+import axios from 'axios';
 
 function Navbar({ setActivePage }) {
-
     const handleLogout = () => {
-        axios.post('/logout').then((res) => {
-            console.log(res.data);
-            localStorage.removeItem('token');
-        })
-    }
+        const storedToken = localStorage.getItem('token');
+
+        if (storedToken) {
+            const accessToken = JSON.parse(storedToken);
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            };
+            axios.post('/logout', {}, config)
+                .then((res) => {
+                    setActivePage('accessHub');
+                    localStorage.removeItem('token');
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    };
+
     return (
         <div className="navbar">
             <h1>Quiz</h1>
@@ -22,4 +37,5 @@ function Navbar({ setActivePage }) {
         </div>
     );
 }
-export default Navbar
+
+export default Navbar;
