@@ -35,23 +35,32 @@ function QuizQuestions({ quizId }) {
             description: description,
             minpassquestions: minpassquestions,
         };
-
-        axios.put('/quiz/update/' + quizId, updatedData).then((res) => {
-            if (res.data == 'success') {
-                setLoading(false);
-                Swal.fire({
-                    icon: "success",
-                    title: "Successfull",
-                    text: "Quiz Saved",
-                    footer: '<a href="#">Why do I have this issue?</a>'
-                  });
-            }
-        })
+        if (updatedData['question_ids'].length) {
+            axios.put('/quiz/update/' + quizId, updatedData).then((res) => {
+                if (res.data == 'success') {
+                    setLoading(false);
+                    Swal.fire({
+                        icon: "success",
+                        title: "Successfull",
+                        text: "Quiz Saved",
+                        footer: '<a href="#">Why do I have this issue?</a>'
+                    });
+                }
+            })
+        }else{
+            setLoading(false);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Sorry some error occured please try again later!",
+                //footer: '<a href="#">Why do I have this issue?</a>'
+            });
+        }
     }
 
     return (
         <>
-          
+
             <div className='container'>
 
                 <h5 className='ms-1 mb-4'>Select Quitions to Add To Quiz</h5>
@@ -75,7 +84,7 @@ function QuizQuestions({ quizId }) {
                             </thead>
                             <tbody>
 
-                                {questionData.length && questionData.map((val, index) => {
+                                {questionData.length ? questionData.map((val, index) => {
 
                                     return (<tr key={val.id}>
                                         <td><input type='checkbox' defaultChecked={quiz_slots && quiz_slots.some(item => item.question_id === val.id ? true : false)} value={val.id} {...register('question_ids')} className='form-check-input' /></td>
@@ -85,7 +94,11 @@ function QuizQuestions({ quizId }) {
                                         <td>{val.question_answers !== null && val.question_answers.correct_answer}</td>
                                     </tr>
                                     )
-                                })}
+                                }) : (
+                                    <tr>
+                                        <td colSpan="6">No data available</td>
+                                    </tr>
+                                )}
 
 
                             </tbody>

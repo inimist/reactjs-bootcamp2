@@ -16,6 +16,7 @@ function Navbar({ setActivePage }) {
                 .then((res) => {
                     setActivePage('accessHub');
                     localStorage.removeItem('token');
+                    localStorage.removeItem('userId');
                 })
                 .catch((error) => {
                     console.error(error);

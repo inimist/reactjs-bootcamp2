@@ -6,14 +6,14 @@ function TrueFalse({ formRegister, setValue }) {
         <div>
             <div className="form-check">
                 <input {...formRegister('correct_answer')} className="form-check-input" type="radio" id="trueOption" value="true" />
-                <label className="form-check-label" for="trueOption">
+                <label className="form-check-label" htmlFor="trueOption">
                     True
                 </label>
             </div>
 
             <div className="form-check">
                 <input {...formRegister('correct_answer')} className="form-check-input" type="radio" id="falseOption" value="false" />
-                <label className="form-check-label" for="falseOption">
+                <label className="form-check-label" htmlFor="falseOption">
                     False
                 </label>
             </div>

@@ -28,20 +28,20 @@ function QuestionBank({ setActivePage }) {
   const showDeleteConfirmation = (id) => {
     // Using SweetAlert2 for a more styled confirmation dialog
     Swal.fire({
-        title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!'
+      title: 'Are you sure?',
+      text: 'You won\'t be able to revert this!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
-        if (result.isConfirmed) {
-            // User clicked the "Yes, delete it!" button
-            handleDelete(id);
-        }
+      if (result.isConfirmed) {
+        // User clicked the "Yes, delete it!" button
+        handleDelete(id);
+      }
     });
-};
+  };
 
   return (
     <>
@@ -68,17 +68,30 @@ function QuestionBank({ setActivePage }) {
                 </tr>
               </thead>
               <tbody>
-                {data.length && data.map((val, index) => {
-                  return (<tr key={val.id}>
-                    <td>{index + 1}</td>
-                    <td><i className="fas fa-edit" title="Edit"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i className="fas fa-times" title="Delete" onClick={() => showDeleteConfirmation(val.id)}></i></td>
-                    <td>{val.title}</td>
-                    <td>{val.description}</td>
-                    <td>{val.question_type.title}</td>
-                    <td>{val.question_answers !== null && val.question_answers.correct_answer}</td>
+                {data.length ? (
+                  data.map((val, index) => (
+                    <tr key={val.id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <i className="fas fa-edit" title="Edit"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <i
+                          className="fas fa-times"
+                          title="Delete"
+                          onClick={() => showDeleteConfirmation(val.id)}
+                        ></i>
+                      </td>
+                      <td>{val.title}</td>
+                      <td>{val.description}</td>
+                      <td>{val.question_type.title}</td>
+                      <td>{val.question_answers !== null && val.question_answers.correct_answer}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6">No data available</td>
                   </tr>
-                  )
-                })}
+                )}
+
               </tbody>
             </table>
           )}

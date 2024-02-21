@@ -6,7 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import QuizActionButton from './button/QuizActionButton';
 import QuizSettingButton from './button/QuizSettingButton';
 
-function Home({ setActivePage, handleQuizClick, handleAttemptClick ,quizData}) {
+function Home({ setActivePage, handleQuizClick, handleAttemptClick, quizData }) {
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
 
@@ -16,7 +16,7 @@ function Home({ setActivePage, handleQuizClick, handleAttemptClick ,quizData}) {
             setLoading(false);
         })
     }, [])
- 
+
     return (
 
         <div className="container">
@@ -40,16 +40,20 @@ function Home({ setActivePage, handleQuizClick, handleAttemptClick ,quizData}) {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.length && data.map((val) => (
+                            {data.length ? data.map((val) => (
                                 <tr key={val.id}>
-                                    <td><QuizActionButton handleQuizClick={handleQuizClick} handleAttemptClick={handleAttemptClick} quizId={val.id} quizData ={quizData}/></td>
+                                    <td><QuizActionButton handleQuizClick={handleQuizClick} handleAttemptClick={handleAttemptClick} quizId={val.id} quizData={quizData} /></td>
                                     <td>{val.name}</td>
                                     <td>{val.description}</td>
                                     <td>{val.quiz_slots.length}</td>
-                                    <td>{val.minpassquestions?val.minpassquestions:'0'}%</td>
+                                    <td>{val.minpassquestions ? val.minpassquestions : '0'}%</td>
                                     <td>{val.showpassfail ? 'Yes' : 'No'}</td>
                                 </tr>
-                            ))}
+                            )) : (
+                                <tr>
+                                    <td colSpan="6">No data available</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 )}
