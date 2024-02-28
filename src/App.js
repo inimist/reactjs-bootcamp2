@@ -1,10 +1,8 @@
 import axios from "axios";
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useEffect } from "react";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import QuestionBank from "./components/QuestionBank";
 import AddQuestion from "./components/AddQuestion";
 import QuizQuestions from "./components/QuizQuestions";
@@ -12,7 +10,6 @@ import AttempQuiz from "./components/AttempQuiz";
 import CreateQuiz from "./components/CreateQuiz";
 import Swal from "sweetalert2";
 import EditQuiz from "./components/EditQuiz";
-import Login from "./components/user/Login";
 import AccessHub from "./components/user/AccessHub";
 import QuizReview from "./components/QuizReview";
 
@@ -50,6 +47,7 @@ function App() {
   const [quizId, setQuizId] = useState(null)
   const [quizAttemptId, setQuizAttemptId] = useState();
   const [quizData, setQuizData] = useState({});
+  const [userRole, setUserRole] = useState({});
   const { quiz_slots } = quizData;
 
   const handleQuizClick = (id, pageName) => {
@@ -78,18 +76,27 @@ function App() {
       });
   };
 
-  const quizAttemptclick = (id) =>{
+  const quizAttemptclick = (id) => {
     console.log(id);
     setQuizAttemptId(id);
     setActivePage('quizReview');
   }
+
+  useEffect(()=>{
+    const role = localStorage.getItem('userRole');
+
+    if (role) {
+       setUserRole(JSON.parse(role));
+    }
+  })
+
   return (
     <>
       <div>
 
-        {activePage === 'accessHub' && <AccessHub setActivePage={setActivePage} />}
-        {activePage !== 'accessHub' && <Navbar setActivePage={setActivePage} />}
-        {activePage === 'home' && <Home setActivePage={setActivePage} handleQuizClick={handleQuizClick} handleAttemptClick={handleAttemptClick} quizData={quizData} />}
+        {activePage === 'accessHub' && <AccessHub setActivePage={setActivePage} userRole={userRole} />}
+        {activePage !== 'accessHub' && <Navbar setActivePage={setActivePage} userRole={userRole} />}
+        {activePage === 'home' && <Home setActivePage={setActivePage} handleQuizClick={handleQuizClick} handleAttemptClick={handleAttemptClick} quizData={quizData} userRole={userRole} />}
         {activePage === 'questionBank' && <QuestionBank setActivePage={setActivePage} />}
         {activePage === 'about' && <h2>About Page</h2>}
         {activePage === 'contact' && <h2>Contact Page</h2>}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-function QuizActionButton({ handleQuizClick, handleAttemptClick, quizId, quizData }) {
+function QuizActionButton({ handleQuizClick, handleAttemptClick, quizId, quizData, userRole }) {
     const [isOpen, setIsOpen] = useState(false);
     const { quiz_slots } = quizData;
     const menuRef = useRef(null);
@@ -34,8 +34,11 @@ function QuizActionButton({ handleQuizClick, handleAttemptClick, quizId, quizDat
             {isOpen && (
                 <div className="options-menu" ref={menuRef}>
                     <ul>
-                        <li onClick={() => handleQuizClick(quizId, 'editQuiz')}>Edit Quiz</li>
-                        <li onClick={() => handleQuizClick(quizId, 'quizQuestion')}>Add Question to Quiz</li>
+                        {userRole == 'admin' ?
+                            <>
+                                <li onClick={() => handleQuizClick(quizId, 'editQuiz')}>Edit Quiz</li>
+                                <li onClick={() => handleQuizClick(quizId, 'quizQuestion')}>Add Question to Quiz</li>
+                            </> : ''}
                         <li onClick={() => handleAttemptClick(quizId)}>Attempt Quiz</li>
                     </ul>
                 </div>

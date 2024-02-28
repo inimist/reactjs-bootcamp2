@@ -6,7 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import QuizActionButton from './button/QuizActionButton';
 import QuizSettingButton from './button/QuizSettingButton';
 
-function Home({ setActivePage, handleQuizClick, handleAttemptClick, quizData }) {
+function Home({ setActivePage, handleQuizClick, handleAttemptClick, quizData, userRole }) {
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
 
@@ -20,7 +20,7 @@ function Home({ setActivePage, handleQuizClick, handleAttemptClick, quizData }) 
     return (
 
         <div className="container">
-            <QuizSettingButton setActivePage={setActivePage} />
+            {userRole == 'admin' && <QuizSettingButton setActivePage={setActivePage} />}
             <h2>Quiz Table</h2>
             <div className="table-container">
                 {loading ? ( // Show loading spinner while data is being fetched
@@ -42,7 +42,7 @@ function Home({ setActivePage, handleQuizClick, handleAttemptClick, quizData }) 
                         <tbody>
                             {data.length ? data.map((val) => (
                                 <tr key={val.id}>
-                                    <td><QuizActionButton handleQuizClick={handleQuizClick} handleAttemptClick={handleAttemptClick} quizId={val.id} quizData={quizData} /></td>
+                                    <td><QuizActionButton handleQuizClick={handleQuizClick} handleAttemptClick={handleAttemptClick} quizId={val.id} quizData={quizData} userRole={userRole} /></td>
                                     <td>{val.name}</td>
                                     <td>{val.description}</td>
                                     <td>{val.quiz_slots.length}</td>

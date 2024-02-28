@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 function Login({ handleToggle, setActivePage }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+
     const data = {
         'email': username,
         'password': password
@@ -19,15 +21,21 @@ function Login({ handleToggle, setActivePage }) {
                     'Content-Type': 'application/json',
                 },
             }).then((res) => {
-                
+
                 if (res.data == 'invalid credential') {
                     setError('Invalid username or password');
                 } else {
                     setActivePage('home');
-                    const userId = res.data.userId;
+                    localStorage.setItem('userRole', JSON.stringify(res.data.userData.role));
+                    const userId = res.data.userData.id;
                     const token = res.data.token;
                     localStorage.setItem('userId', JSON.stringify(userId));
                     localStorage.setItem('token', JSON.stringify(token));
+                    const isSecure = window.location.protocol === 'https:';
+                    Cookies.set('userRole', 'admin', { expires: 7, secure: true, httpOnly: true, sameSite: 'strict', path: '/' });
+
+                    const userRole = Cookies.get('userRole');
+                    console.log(document.cookie);
                 }
             })
         } else {
