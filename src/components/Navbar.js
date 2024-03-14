@@ -24,7 +24,7 @@ function Navbar({ setActivePage, userRole }) {
                 });
         }
     };
-console.log(userRole);
+
     return (
         <div className="navbar">
             <h1>Quiz</h1>

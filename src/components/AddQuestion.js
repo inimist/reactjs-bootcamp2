@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import MultipleChoiceOneAnswer from './questionType/MultipleChoiceOneAnswer';
 import TrueFalse from './questionType/TrueFalse';
+import MultipleChoiceMultiAnswer from './questionType/MultipleChoiceMultiAnswer';
 
 function AddQuestion({ setActivePage }) {
     const [loading, setLoading] = useState(true);
@@ -43,6 +44,13 @@ function AddQuestion({ setActivePage }) {
             data.correct_answer = answer;
         }
 
+        if (data.question_type_id == 6) {
+            const answer = Object.entries(choices)
+                .filter(([key, value]) => value === true)
+                .map(([key]) => key).join(', ');
+            data.correct_answer = answer;
+        }
+        //console.log(data); return false;
         axios.post('/question/create', data).then((res) => {
             setQuestionAnswers({
                 question_id: res.data.question_id,
@@ -113,6 +121,7 @@ function AddQuestion({ setActivePage }) {
                         </div>
                         {selQuestion === '5' && <MultipleChoiceOneAnswer formRegister={register} setValue={setValue} />}
                         {selQuestion === '4' && <TrueFalse formRegister={register} setValue={setValue} />}
+                        {selQuestion === '6' && <MultipleChoiceMultiAnswer formRegister={register} setValue={setValue} />}
                         <button type="submit" className="btn btn-primary">Submit</button>
                     </form>
                 </div>

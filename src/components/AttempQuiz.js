@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
+import { render } from '@testing-library/react';
 
 
 function AttemptQuiz({ quizId, quizData, quizAttemptclick }) {
@@ -10,13 +11,46 @@ function AttemptQuiz({ quizId, quizData, quizAttemptclick }) {
   const [result, setResult] = useState({});
   const userId = localStorage.getItem('userId');
 
+
   const handleQuizAttempt = (data) => {
     axios.post('/quizAttempt/create', data).then((res) => {
+     // console.log(res.data);return false;
       setResult(res.data);
       quizAttemptclick(res.data.id);
     })
   }
 
+  const renderCont = (res) => {
+    const options = res.question.question_answers.answer_options.split(',');
+    console.log(res.question.question_type.id);
+    return options.map((opt, optIndex) => {
+      if (res.question.question_type.id != '6') {
+        // Render radio buttons
+        return (
+          <div key={optIndex}>
+            <input
+              type='radio'
+              value={opt}
+              {...register(`questionAttempt[${res.question.id}]`)}
+            />
+            <span className="ms-1">{opt}</span>
+          </div>
+        );
+      } else {
+        // Render checkboxes
+        return (
+          <div key={optIndex}>
+            <input
+              type='checkbox'
+              value={opt}
+              {...register(`questionAttempt[${res.question.id}]`)}
+            />
+            <span className="ms-1">{opt}</span>
+          </div>
+        );
+      }
+    });
+  };
   return (
     <div className='container'>
       <form onSubmit={handleSubmit(handleQuizAttempt)}>
@@ -27,14 +61,8 @@ function AttemptQuiz({ quizId, quizData, quizAttemptclick }) {
             <div className="ms-2">
               <h6>{index + 1}. {res.question.title}</h6>
               <div className='my-0 ms-2'>
-                {/* Splitting answer options and rendering them */}
-                {res.question.question_answers.answer_options &&
-                  res.question.question_answers.answer_options.split(',').map((opt, optIndex) => (
-                    <div key={optIndex}>
-                      <input type='radio' value={opt}  {...register('questionAttempt[' + res.question.id + ']')} />
-                      <span className="ms-1">{opt}</span>
-                    </div>
-                  ))
+                {
+                  renderCont(res)
                 }
               </div>
             </div>
