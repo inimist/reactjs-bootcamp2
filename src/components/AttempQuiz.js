@@ -14,7 +14,6 @@ function AttemptQuiz({ quizId, quizData, quizAttemptclick }) {
 
   const handleQuizAttempt = (data) => {
     axios.post('/quizAttempt/create', data).then((res) => {
-     // console.log(res.data);return false;
       setResult(res.data);
       quizAttemptclick(res.data.id);
     })
@@ -22,7 +21,6 @@ function AttemptQuiz({ quizId, quizData, quizAttemptclick }) {
 
   const renderCont = (res) => {
     const options = res.question.question_answers.answer_options.split(',');
-    console.log(res.question.question_type.id);
     return options.map((opt, optIndex) => {
       if (res.question.question_type.id != '6') {
         // Render radio buttons

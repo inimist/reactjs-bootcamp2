@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { areArraysEqual } from "./functions/arrayUtils";
 
 function QuizReview({ quizAttemptId }) {
     const [userReview, setUserReview] = useState({});
@@ -21,17 +22,18 @@ function QuizReview({ quizAttemptId }) {
                         const questionsummary = opt.questionsummary.split(':');
                         const question = questionsummary[0];
                         const options = questionsummary[1].split(',');
+
                         if (opt.question.question_type_id != 6) {
                             return (
+
                                 <div key={optIndex} className="mb-4">
                                     <h6>{optIndex + 1}. {question}</h6>
-
                                     {/* Mapping over options array */}
                                     {options.map((option, optionIndex) => {
 
-                                        const isCorrectAnswer = opt.rightanswer.trim() === option.trim();
-                                        const isUserResponseCorrect = opt.rightanswer.trim() === opt.responsesummary.trim();
-                                        const isUserSelectedOption = option.trim() === opt.responsesummary.trim();
+                                        let isCorrectAnswer = opt.rightanswer.trim() === option.trim();
+                                        let isUserResponseCorrect = opt.rightanswer.trim() === opt.responsesummary.trim();
+                                        let isUserSelectedOption = option.trim() === opt.responsesummary.trim();
 
                                         let bgColor = '';
                                         let optText = '';
@@ -63,12 +65,48 @@ function QuizReview({ quizAttemptId }) {
                                 </div>
                             );
                         } else {
+                            //{ console.log(opt) }
+
                             return (
-                               <>
-                                
-                               </>
+                                <div key={optIndex} className="mb-4">
+                                    <h6>{optIndex + 1}. {question}</h6>
+                                    {options.map((option, optionIndex) => {
+
+                                        let userResponse = opt.responsesummary.split(',');
+                                        let correctAnswers = opt.rightanswer.split(',');
+                                        let bgColor = '';
+                                        let optText = '';
+                                        if (userResponse.includes(option) && areArraysEqual(userResponse, correctAnswers)) {//All right answers
+                                            bgColor = 'bg-success'; 
+                                            optText = 'Your answer'
+                                        }else if(userResponse.includes(option) && !correctAnswers.includes(option)){//if any of option is wrong chossen
+                                            bgColor = 'bg-danger'; 
+                                            optText = 'Your answer'
+                                        }else if(userResponse.includes(option) && correctAnswers.includes(option)){//if any option is right
+                                            bgColor = 'bg-success'; 
+                                            optText = 'Your answer'
+                                        }
+                                        if(!userResponse.includes(option) &&  correctAnswers.includes(option)){ // Correct answer not selected by the user
+                                            bgColor = 'bg-light'; 
+                                            optText = 'Correct answer'
+                                        }
+                                        return (
+                                            <div key={optionIndex} className={`d-flex p-2 mb-2 ${bgColor}`}>
+                                                <div className="flex-grow-1">
+                                                    {option}
+                                                </div>
+                                                {optText && (
+                                                    <div className="text-right p-1" style={{ background: 'rgba(0, 0, 0, 0.2)' }}>
+                                                        {optText}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )
+                                    })}
+                                </div>
                             )
                         }
+
                     })}
             </div>
 
