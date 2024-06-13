@@ -1,6 +1,7 @@
-import axios from 'axios';
+import api from './user/api.js';
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
+
 
 function EditQuiz({ quizId }) {
     const [data, setData] = useState({
@@ -10,7 +11,7 @@ function EditQuiz({ quizId }) {
     });
 
     useEffect(() => {
-        axios.get('/quiz/edit/' + quizId).then((res) => {
+        api.get('/quiz/edit/' + quizId).then((res) => {
             setData({
                 'name': res.data.name,
                 'description': res.data.description,
@@ -61,7 +62,7 @@ function EditQuiz({ quizId }) {
             return;
         }
 
-        axios.put('/quiz/update/' + quizId, data).then((res) => {
+        api.put('/quiz/update/' + quizId, data).then((res) => {
             if (res.data === 'success') {
                 Swal.fire({
                     icon: 'success',

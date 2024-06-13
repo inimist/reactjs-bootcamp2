@@ -1,20 +1,21 @@
 import React from 'react'
-import axios from "axios";
 import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import QuizActionButton from './button/QuizActionButton';
 import QuizSettingButton from './button/QuizSettingButton';
+import api from './user/api';
 
 function Home({ setActivePage, handleQuizClick, handleAttemptClick, quizData, userRole }) {
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('quiz').then((res) => {
-            setData(res.data);
-            setLoading(false);
-        })
+            api.get('quiz').then((res) => {
+                setData(res.data);
+                setLoading(false);
+            })
+        
     }, [])
 
     return (

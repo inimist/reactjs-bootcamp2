@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
+import api from './user/api';
 import OptionButton from './button/Optionbutton';
 import Swal from 'sweetalert2';
 
@@ -8,17 +8,17 @@ function QuestionBank({ setActivePage }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/question').then((res) => {
+    api.get('/question').then((res) => {
       setData(res.data);
       setLoading(false);
     })
   }, [])
 
   const handleDelete = (id) => {
-    axios.delete('question/delete/' + id).then((res) => {
+    api.delete('question/delete/' + id).then((res) => {
       setLoading(true);
       if (res.data == 'deleted') {
-        axios.get('/question').then((res) => {
+        api.get('/question').then((res) => {
           setData(res.data);
           setLoading(false);
         })

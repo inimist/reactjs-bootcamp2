@@ -26,17 +26,19 @@ function Login({ handleToggle, setActivePage }) {
                     setError('Invalid username or password');
                 } else {
                     setActivePage('home');
-                    localStorage.setItem('userRole', JSON.stringify(res.data.userData.role));
-                    const userId = res.data.userData.id;
+                    localStorage.setItem('userRole', JSON.stringify(res.data.user.role));
+                    const userId = res.data.user.id;
                     const token = res.data.token;
                     localStorage.setItem('userId', JSON.stringify(userId));
                     localStorage.setItem('token', JSON.stringify(token));
-                    const isSecure = window.location.protocol === 'https:';
+                   // const isSecure = window.location.protocol === 'https:';
                     Cookies.set('userRole', 'admin', { expires: 7, secure: true, httpOnly: true, sameSite: 'strict', path: '/' });
 
-                    const userRole = Cookies.get('userRole');
-                    console.log(document.cookie);
+                    // const userRole = Cookies.get('userRole');
+                    // console.log(document.cookie);
                 }
+            }).catch((error) => {
+                setError(error.response.data.error);
             })
         } else {
             setError('Invalid username or password');

@@ -1,28 +1,20 @@
 import React from 'react';
-import axios from 'axios';
+import api from './user/api';
 
 function Navbar({ setActivePage, userRole }) {
     const handleLogout = () => {
-        const storedToken = localStorage.getItem('token');
 
-        if (storedToken) {
-            const accessToken = JSON.parse(storedToken);
-            const config = {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            };
-            axios.post('/logout', {}, config)
-                .then((res) => {
-                    setActivePage('accessHub');
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('userId');
-                    localStorage.removeItem('userRole');
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
+        api.post('/logout')
+            .then((res) => {
+                setActivePage('accessHub');
+                localStorage.removeItem('token');
+                localStorage.removeItem('userId');
+                localStorage.removeItem('userRole');
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
     };
 
     return (

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from './user/api';
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2';
@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 function CreateQuiz() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const onSubmit = (data) => {
-        axios.post('/quiz/create', data).then((res) => {
+        api.post('/quiz/create', data).then((res) => {
             if (res.data == 'success') {
                 Swal.fire({
                     icon: "success",

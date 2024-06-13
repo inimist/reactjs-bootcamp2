@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios';
+import api from './user/api';
 import { useForm } from 'react-hook-form';
 import MultipleChoiceOneAnswer from './questionType/MultipleChoiceOneAnswer';
 import TrueFalse from './questionType/TrueFalse';
@@ -51,7 +51,7 @@ function AddQuestion({ setActivePage }) {
             data.correct_answer = answer;
         }
         //console.log(data); return false;
-        axios.post('/question/create', data).then((res) => {
+        api.post('/question/create', data).then((res) => {
             setQuestionAnswers({
                 question_id: res.data.question_id,
                 answer_options: data.answer_options,
@@ -62,7 +62,7 @@ function AddQuestion({ setActivePage }) {
 
     };
     useEffect(() => {
-        axios.get('questionType').then((res) => {
+        api.get('questionType').then((res) => {
             setQuestionType(res.data);
         })
         setLoading(false);

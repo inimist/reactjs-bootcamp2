@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Swal from 'sweetalert2';
-import { render } from '@testing-library/react';
-
+import api from './user/api';
 
 function AttemptQuiz({ quizId, quizData, quizAttemptclick }) {
   const { quiz_slots } = quizData;
@@ -13,7 +10,7 @@ function AttemptQuiz({ quizId, quizData, quizAttemptclick }) {
 
 
   const handleQuizAttempt = (data) => {
-    axios.post('/quizAttempt/create', data).then((res) => {
+    api.post('/quizAttempt/create', data).then((res) => {
       setResult(res.data);
       quizAttemptclick(res.data.id);
     })

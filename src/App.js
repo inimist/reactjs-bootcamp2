@@ -18,7 +18,11 @@ axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL + "/api/v1";
 //   axios.defaults.headers.common["Authorization"] = getBearer();
 if (!axios.defaults.headers.post["Content-Type"])
   axios.defaults.headers.post["Content-Type"] = "application/json";
-
+const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      const accessToken = JSON.parse(storedToken);
+      axios.defaults.headers.post['Authorization'] = `Bearer ${accessToken}`;
+    }
 axios.interceptors.request.use(
   (request) => {
     // console.log(request);
@@ -57,23 +61,34 @@ function App() {
 
   const handleAttemptClick = (id) => {
     setQuizId(id);
-    axios.get(`/quiz/show/${id}`)
-      .then((res) => {
-        setQuizData(res.data);
-        if (res.data.quiz_slots.length !== 0) {
-          setActivePage('attemptQuestion');
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Sorry",
-            text: "There are no question to attempt in this quiz",
-            footer: '<a href="#">Why do I have this issue?</a>'
-          });
+    const storedToken = localStorage.getItem('token');
+
+    if (storedToken) {
+      const accessToken = JSON.parse(storedToken);
+
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching quiz data:", error);
-      });
+      };
+      axios.get(`/quiz/show/${id}`, config)
+        .then((res) => {
+          setQuizData(res.data);
+          if (res.data.quiz_slots.length !== 0) {
+            setActivePage('attemptQuestion');
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Sorry",
+              text: "There are no question to attempt in this quiz",
+              footer: '<a href="#">Why do I have this issue?</a>'
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching quiz data:", error);
+        });
+    }
   };
 
   const quizAttemptclick = (id) => {
@@ -82,11 +97,11 @@ function App() {
     setActivePage('quizReview');
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     const role = localStorage.getItem('userRole');
 
     if (role) {
-       setUserRole(JSON.parse(role));
+      setUserRole(JSON.parse(role));
     }
   })
 

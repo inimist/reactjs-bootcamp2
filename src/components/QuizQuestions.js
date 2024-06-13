@@ -1,8 +1,7 @@
-import axios from 'axios';
+import api from './user/api.js';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
-import SweetAlert2 from 'react-sweetalert2';
 
 
 function QuizQuestions({ quizId }) {
@@ -11,15 +10,15 @@ function QuizQuestions({ quizId }) {
     const [loading, setLoading] = useState(true);
     const { register, handleSubmit } = useForm();
     const { name, description, minpassquestions, quiz_slots } = quizData; //gettign name description and minpasquestions from quizData
-    const [successMessage, setSuccessMessage] = useState('');
+
 
     useEffect(() => {
-        axios.get('/quiz/show/' + quizId).then((res) => {
+        api.get('/quiz/show/' + quizId).then((res) => {
             setQuizData(res.data);
         })
     }, [])
     useEffect(() => {
-        axios.get('/question').then((res) => {
+        api.get('/question').then((res) => {
             setQuestionData(res.data);
             setLoading(false);
         })
@@ -36,7 +35,7 @@ function QuizQuestions({ quizId }) {
             minpassquestions: minpassquestions,
         };
         if (updatedData['question_ids'].length) {
-            axios.put('/quiz/update/' + quizId, updatedData).then((res) => {
+            api.put('/quiz/update/' + quizId, updatedData).then((res) => {
                 if (res.data == 'success') {
                     setLoading(false);
                     Swal.fire({

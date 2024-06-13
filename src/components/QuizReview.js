@@ -1,4 +1,4 @@
-import axios from "axios"
+import api from './user/api';
 import { useEffect, useState } from "react"
 import { areArraysEqual } from "./functions/arrayUtils";
 
@@ -7,7 +7,7 @@ function QuizReview({ quizAttemptId }) {
 
 
     useEffect(() => {
-        axios.get('/quizAttempt/show/' + quizAttemptId).then((res) => {
+        api.get('/quizAttempt/show/' + quizAttemptId).then((res) => {
             setUserReview(res.data)
         })
     }, [])
